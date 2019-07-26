@@ -1,0 +1,15 @@
+{
+  "Email": "Email",
+  "Email is required.": "El Email es obligatorio.",
+  "Please enter a valid email.": "Por favor ingrese una dirección de correo válida.",
+  "Password": "Contraseña",
+  "Password is required.": "La contraseña es obligatoria.",
+  "Password must be at least 5 characters long.": "La contraseña debe contener al menos 5 caracteres.",
+  "Log In": "Ingresar",
+  "No account yet ?": "No tienes una cuenta aun ?",
+  "Create an account.": "Registrate",
+  "Create account": "Crear cuenta",
+  "Register": "Registrarse",
+  "Already have an account ?": "Ya tienes una cuenta ?",
+  "Try to Log In.": "Ingresa"
+}

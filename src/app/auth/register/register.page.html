@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{'Create account'|translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content padding>
+  <form class="form" [formGroup]="form"  (ngSubmit)="tryRegister(form.value)">
+ 
+    <ion-item>
+      <ion-label  position="floating" color="primary">{{'Email'|translate}}</ion-label>
+      <ion-input type="text" formControlName="email"></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validationMessages.email">
+        <div class="error-message" *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+ 
+    <ion-item>
+      <ion-label  position="floating" color="primary">{{'Password'|translate}}</ion-label>
+      <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validationMessages.password">
+        <div class="error-message" *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+ 
+    
+    <ion-button  class="submit-btn" type="submit"  [disabled]="!form.valid">{{'Register'|translate}}</ion-button>
+    <label class="error-message">{{errorMessage}}</label>
+    <label class="success-message">{{successMessage}}</label>
+  </form>
+  <p class="go-to-login">{{'Already have an account ?'|translate}}<a (click)="goLoginPage()">{{'Try to Log In.'|translate}}</a></p>
+</ion-content>
