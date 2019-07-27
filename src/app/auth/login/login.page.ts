@@ -116,7 +116,7 @@ export class LoginPage implements OnInit {
   }
 
   loginFacebook() {
-    cfaSignIn('facebook.com').pipe(
+    this.facebookSubscription = cfaSignIn('facebook.com').pipe(
       tap(user => {
         this.errorMessage = '';
         this.store.dispatch(new Login({user}));
@@ -129,7 +129,7 @@ export class LoginPage implements OnInit {
   }
 
   loginGoogle() {
-    cfaSignIn('google.com').pipe(
+    this.googleSubscription = cfaSignIn('google.com').pipe(
       tap(user => {
         this.errorMessage = '';
         this.store.dispatch(new Login({user}));
@@ -142,7 +142,7 @@ export class LoginPage implements OnInit {
   }
 
   loginTwitter() {
-    cfaSignIn('twitter.com').pipe(
+    this.twitterSubscription = cfaSignIn('twitter.com').pipe(
       tap(user => {
         this.errorMessage = '';
         this.store.dispatch(new Login({user}));
