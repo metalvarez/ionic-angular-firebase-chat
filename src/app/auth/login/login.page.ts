@@ -12,6 +12,7 @@ import { noop, fromEvent, Subscription } from 'rxjs';
 import { isLoggedIn } from 'src/app/auth/auth.selectors';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { cfaSignIn } from 'capacitor-firebase-auth';
 
 const { Storage } = Plugins;
 
@@ -24,6 +25,9 @@ export class LoginPage implements OnInit {
 
   form: FormGroup;
   loginSubscription: Subscription;
+  googleSubscription: Subscription;
+  facebookSubscription: Subscription;
+  twitterSubscription: Subscription;
   errorMessage: string;
   passwordType = 'password';
   showPassword = false;
@@ -111,6 +115,45 @@ export class LoginPage implements OnInit {
     });
   }
 
+  loginFacebook() {
+    cfaSignIn('facebook.com').pipe(
+      tap(user => {
+        this.errorMessage = '';
+        this.store.dispatch(new Login({user}));
+        this.router.navigateByUrl('/home');
+      })
+    ).subscribe(
+      noop,
+      error => console.log(error)
+    );
+  }
+
+  loginGoogle() {
+    cfaSignIn('google.com').pipe(
+      tap(user => {
+        this.errorMessage = '';
+        this.store.dispatch(new Login({user}));
+        this.router.navigateByUrl('/home');
+      })
+    ).subscribe(
+      noop,
+      error => console.log(error)
+    );
+  }
+
+  loginTwitter() {
+    cfaSignIn('twitter.com').pipe(
+      tap(user => {
+        this.errorMessage = '';
+        this.store.dispatch(new Login({user}));
+        this.router.navigateByUrl('/home');
+      })
+    ).subscribe(
+      noop,
+      error => console.log(error)
+    );
+  }
+
   goToRegisterPage() {
     this.router.navigateByUrl('/register');
   }
@@ -134,6 +177,18 @@ export class LoginPage implements OnInit {
     if (!_.isEmpty(this.loginSubscription)) {
       console.log('this.loginSubscription.unsubscribe()');
       this.loginSubscription.unsubscribe();
+    }
+    if (!_.isEmpty(this.googleSubscription)) {
+      console.log('this.googleSubscription.unsubscribe()');
+      this.googleSubscription.unsubscribe();
+    }
+    if (!_.isEmpty(this.facebookSubscription)) {
+      console.log('this.facebookSubscription.unsubscribe()');
+      this.facebookSubscription.unsubscribe();
+    }
+    if (!_.isEmpty(this.twitterSubscription)) {
+      console.log('this.twitterSubscription.unsubscribe()');
+      this.twitterSubscription.unsubscribe();
     }
   }
 
