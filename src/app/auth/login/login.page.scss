@@ -1,3 +1,22 @@
+form {
+  margin-bottom: 45px;
+}
+
+img {
+  margin-top: 65px;
+}
+
+h3 {
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 45px;
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
 ion-card {
   min-height: 35px;
   padding-top: 3px;
@@ -11,13 +30,15 @@ ion-card {
 }
 
 .facebook-col {
-  padding-top: 2px;
-  padding-right: 8px;
+  padding: 2px 5px 0 5px;
 }
 
 .google-col {
-  padding-top: 2px;
-  padding-left: 8px;
+  padding: 2px 5px 0 5px;
+}
+
+.twitter-col {
+  padding: 2px 5px 0 5px;
 }
 
 ion-card-content {

@@ -13,6 +13,8 @@ export class LoginPage implements OnInit {
 
   form: FormGroup;
   errorMessage: string;
+  passwordType = 'password';
+  showPassword = false;
   validationMessages = {
     email: [
       { type: 'required', message: this.translator.instant('Email is required.') },
@@ -57,6 +59,21 @@ export class LoginPage implements OnInit {
 
   goToRegisterPage() {
     this.navCtrl.navigateForward('/register');
+  }
+
+  trim($event) {
+    const value = $event.target.value.trim();
+    this.form.get('email').setValue(value);
+  }
+
+  togglePasswordInputType() {
+    if (this.showPassword) {
+      this.showPassword = false;
+      this.passwordType = 'password';
+    } else {
+      this.showPassword = true;
+      this.passwordType = 'text';
+    }
   }
 
 }

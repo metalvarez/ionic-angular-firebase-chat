@@ -1,5 +1,11 @@
 <ion-content>
   <ion-grid padding-start padding-end>
+    <ion-row>
+      <ion-col>
+        <img src="assets/logo.jpg" alt="">
+        <h3>Ionic Firebase Chat App</h3>
+      </ion-col>
+    </ion-row>
     <form class="col s12" [formGroup]="form"  (ngSubmit)="loginUser(form.value)">
       <ion-item class="item-input">
         <ion-icon name="mail"></ion-icon>
@@ -21,12 +27,22 @@
           required
           formControlName="password"></ion-input>
         <ion-icon
-          (click)='hidePassword()'
+          *ngIf="showPassword"
+          style="margin-right: 0;"
+          (click)='togglePasswordInputType()'
           name="eye"></ion-icon>
         <ion-icon
-          (click)='showPassword()'
+          *ngIf="!showPassword"
+          style="margin-right: 0;"
+          (click)='togglePasswordInputType()'
           name="eye-off"></ion-icon>
       </ion-item>
+      <p style="text-align: right; font-size: 11px; margin-top: 8px; margin-bottom: 16px;">
+          <a
+          href="#"
+          no-margin
+          no-padding>{{'Forgot Password ?'|translate}}</a>
+      </p>
       <div class="validation-errors">
         <ng-container *ngFor="let validation of validationMessages.password">
           <div class="error-message" *ngIf="form.get('password').hasError(validation.type) && (form.get('password').dirty || form.get('password').touched)">
@@ -41,29 +57,34 @@
       <ion-col class="facebook-col" padding-start>
         <ion-card (click)="facebookLogin()" mode="ios" no-margin class="ripple">
           <ion-card-content>
-            <ion-icon class="facebook" src="/assets/icon/togo-facebook.svg"></ion-icon>
-            <span class="divider-facebook">|</span>
-            <span class="content">{{ 'facebook' | translate}}</span>
+            <ion-icon class="facebook" src="/assets/icon/facebook.svg"></ion-icon>
+            <span class="content">{{ 'Facebook' | translate}}</span>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col class="twitter-col" padding-end>
+        <ion-card (click)="googleLogin()" mode="ios" no-margin class="ripple">
+          <ion-card-content>
+            <ion-icon class="google" src="/assets/icon/twitter.svg"></ion-icon>
+            <span class="content">
+              {{ 'Twitter' | translate}}
+            </span>
           </ion-card-content>
         </ion-card>
       </ion-col>
       <ion-col class="google-col" padding-end>
         <ion-card (click)="googleLogin()" mode="ios" no-margin class="ripple">
           <ion-card-content>
-            <ion-icon class="google" src="/assets/icon/togo-google.svg"></ion-icon>
-            <span class="divider-google">|</span>
+            <ion-icon class="google" src="/assets/icon/google.svg"></ion-icon>
             <span class="content">
-              {{ 'google' | translate}}
+              {{ 'Google' | translate}}
             </span>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <p style="text-align: center;width: 100%;margin-top: 35px;font-size: 12px;">{{'No account yet ?'|translate}} <a href="#">{{'Create an account.'|translate}}</a></p>
+    </ion-row>
   </ion-grid>
 </ion-content>
-<ion-footer mode="ios">
-  <div class="footer-content" (click)="goToRegisterPage()">
-    <ion-icon name="arrow-dropup"></ion-icon>
-    <p>{{'No account yet ?'|translate}} <a href="#">{{'Create an account.'|translate}}</a></p>
-  </div>
-</ion-footer>

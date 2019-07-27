@@ -23,6 +23,11 @@ ion-item {
   }
 }
 
+.error-message {
+  margin-bottom: 8px;
+  color: var(--ion-color-danger);
+}
+
 ion-footer {
   .footer-content {
     background: #ffffff;
