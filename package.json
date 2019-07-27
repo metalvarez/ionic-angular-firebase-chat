@@ -31,6 +31,7 @@
     "@ngrx/store-devtools": "^7.4.0",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
+    "capacitor-firebase-auth": "^0.1.5",
     "core-js": "^2.5.4",
     "firebase": "^6.3.2",
     "rxjs": "~6.5.1",

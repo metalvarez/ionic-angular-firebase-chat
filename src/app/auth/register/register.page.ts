@@ -3,6 +3,9 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { NavController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/reducers';
+import { Login } from 'src/app/auth/auth.actions';
 
 @Component({
   selector: 'app-register',
@@ -29,7 +32,8 @@ export class RegisterPage implements OnInit {
     private navCtrl: NavController,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private store: Store<AppState>
   ) { }
 
   ngOnInit() {
@@ -47,10 +51,12 @@ export class RegisterPage implements OnInit {
 
   tryRegister(value) {
     this.authService.registerUser(value)
-     .then(res => {
+     .then((res: any) => {
        console.log(res);
+       const user = res.user;
        this.errorMessage = '';
        this.successMessage = this.translator.instant('Your account has been created. Please log in.');
+       this.store.dispatch(new Login({user}));
      }, err => {
        console.log(err);
        this.errorMessage = err.message;

@@ -40,7 +40,7 @@ export class AuthService {
     });
   }
 
-  userDetails(){
+  userDetails() {
     return firebase.auth().currentUser;
   }
 

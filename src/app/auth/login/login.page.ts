@@ -1,8 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
-import { AuthService } from '../auth.service';
+import { Plugins } from '@capacitor/core';
+import { AuthService } from 'src/app/auth/auth.service';
+import { AppState } from 'src/app/reducers';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
+import { Store, select } from '@ngrx/store';
+import { Login, Logout } from 'src/app/auth/auth.actions';
+import { PreviousRouteService } from 'src/app/shared/previous-route.service';
+import { noop, fromEvent, Subscription } from 'rxjs';
+import { isLoggedIn } from 'src/app/auth/auth.selectors';
+import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-login',
@@ -12,9 +23,11 @@ import { TranslateService } from '@ngx-translate/core';
 export class LoginPage implements OnInit {
 
   form: FormGroup;
+  loginSubscription: Subscription;
   errorMessage: string;
   passwordType = 'password';
   showPassword = false;
+  showFooter = true;
   validationMessages = {
     email: [
       { type: 'required', message: this.translator.instant('Email is required.') },
@@ -27,13 +40,21 @@ export class LoginPage implements OnInit {
   };
 
   constructor(
-    private navCtrl: NavController,
+    private router: Router,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private translator: TranslateService
+    private store: Store<AppState>,
+    private translator: TranslateService,
+    private previousRouteService: PreviousRouteService
   ) { }
 
   ngOnInit() {
+    fromEvent(window, 'keyboardWillShow').subscribe(() => {
+      this.showFooter = false;
+    });
+    fromEvent(window, 'keyboardWillHide').subscribe(() => {
+      this.showFooter = true;
+    });
     this.form = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
         Validators.required,
@@ -46,19 +67,52 @@ export class LoginPage implements OnInit {
     });
   }
 
+  ionViewWillEnter() {
+    this.loginSubscription = this.store.pipe(
+      select(isLoggedIn),
+      tap(async (loggedIn) => {
+        if (!loggedIn) {
+          const user = await Storage.get({ key: 'user' });
+          if (_.isEmpty(user)) {
+            return;
+          }
+          this.router.navigateByUrl('home');
+          return;
+        }
+        const previousRoute = this.previousRouteService.getPreviousUrl();
+        console.log(previousRoute, isLoggedIn);
+        if (previousRoute === '/home') {
+          localStorage.removeItem('user');
+          Storage.remove({
+            key: 'user'
+          }).then(() => {
+            this.store.dispatch(new Logout());
+          });
+        } else if (previousRoute !== '/login') {
+          this.router.navigateByUrl('home');
+        }
+      })
+    ).subscribe(
+      noop,
+      error => console.log(error)
+    );
+  }
+
   loginUser(value) {
     this.authService.loginUser(value)
-    .then(res => {
+    .then((res: any) => {
       console.log(res);
+      const user = res.user;
       this.errorMessage = '';
-      this.navCtrl.navigateForward('/home');
+      this.store.dispatch(new Login({user}));
+      this.router.navigateByUrl('/home');
     }, err => {
       this.errorMessage = err.message;
     });
   }
 
   goToRegisterPage() {
-    this.navCtrl.navigateForward('/register');
+    this.router.navigateByUrl('/register');
   }
 
   trim($event) {
@@ -73,6 +127,13 @@ export class LoginPage implements OnInit {
     } else {
       this.showPassword = true;
       this.passwordType = 'text';
+    }
+  }
+
+  ionViewWillLeave() {
+    if (!_.isEmpty(this.loginSubscription)) {
+      console.log('this.loginSubscription.unsubscribe()');
+      this.loginSubscription.unsubscribe();
     }
   }
 

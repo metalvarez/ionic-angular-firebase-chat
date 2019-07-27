@@ -11,8 +11,9 @@ import { LoginPage } from './login.page';
 import { StoreModule } from '@ngrx/store';
 import { AuthEffects } from '../auth.effects';
 import { EffectsModule } from '@ngrx/effects';
-import { AuthGuard } from '../auth.guard';
-import { AuthService } from '../auth.service';
+import { AuthGuard } from 'src/app/auth/auth.guard';
+import { AuthService } from 'src/app/auth/auth.service';
+import { PreviousRouteService } from 'src/app/shared/previous-route.service';
 
 const routes: Routes = [
   {
@@ -41,7 +42,8 @@ export class LoginPageModule {
         ngModule: LoginPageModule,
         providers: [
           AuthService,
-          AuthGuard
+          AuthGuard,
+          PreviousRouteService
         ]
     };
   }
